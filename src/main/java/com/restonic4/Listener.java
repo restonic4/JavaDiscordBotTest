@@ -1,5 +1,6 @@
 package com.restonic4;
 
+import com.restonic4.registry.CommandRegistry;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.GenericEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -31,8 +32,6 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        /*if (event.get) {
-
-        }*/
+        CommandRegistry.executeCommand(event.getCommandIdLong(), event);
     }
 }
