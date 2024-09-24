@@ -16,9 +16,12 @@ public class CommandRegistry {
     private static void getOrCreateCommand(Guild guild, List<Command> commandList, CommandObject commandObject) {
         String name = commandObject.getName();
 
-        for (Command command : commandList) {
+        for (int i = 0; i < commandList.size(); i++) {
+            Command command = commandList.get(i);
+
             if (command.getName().equals(name)) {
                 registry.put(command.getIdLong(), commandObject);
+                commandList.remove(i);
                 return;
             }
         }
@@ -35,9 +38,16 @@ public class CommandRegistry {
     public static void registerCommands(Guild guild) {
         guild.retrieveCommands().queue(commandList -> {
             getOrCreateCommand(guild, commandList, new PingCommand());
+            removeTrash(commandList);
         }, error -> {
             System.out.println("Error retrieving commands: " + error.getMessage());
         });
+    }
+
+    public static void removeTrash(List<Command> commandList) {
+        for (Command command : commandList) {
+            System.out.println("Trash command: " + command);
+        }
     }
 
     public static void populate() {
