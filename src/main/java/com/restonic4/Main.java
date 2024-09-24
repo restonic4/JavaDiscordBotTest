@@ -8,6 +8,9 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.internal.utils.JDALogger;
 
+import java.util.EnumSet;
+import java.util.List;
+
 //invite perms id = 1759218067566535
 //invite = https://discord.com/oauth2/authorize?client_id=1287694211906539520
 
@@ -21,13 +24,15 @@ public class Main {
         //JDALogger.setFallbackLoggerEnabled(false)
 
         JDA jda = JDABuilder.createDefault(token)
-                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                .enableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
                 .addEventListeners(new Listener())
                 .build();
 
-        Guild guild = jda.getGuildById("1287697784572743790");
-
-        guild.upsertCommand("ping", "Idk");
+        List<Guild> guilds = jda.getGuilds();
+        for (Guild guild : guilds) {
+            System.out.println("Guild: " + guild);
+            CommandRegistry.registerCommands(guild);
+        }
 
         //jda.awaitReady();
     }
