@@ -21,6 +21,6 @@ public class PingCommand extends CommandObject {
 
     @Override
     public void onExecute(SlashCommandInteractionEvent event) {
-        event.getChannel().sendMessage("Pong");
+        event.reply("Pong").queue();
     }
 }

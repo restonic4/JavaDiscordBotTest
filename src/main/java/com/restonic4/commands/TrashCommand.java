@@ -21,6 +21,6 @@ public class TrashCommand extends CommandObject {
 
     @Override
     public void onExecute(SlashCommandInteractionEvent event) {
-        event.getChannel().sendMessage("did nothing");
+        event.reply("nothing").queue();
     }
 }

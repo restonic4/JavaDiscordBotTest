@@ -1,6 +1,7 @@
 package com.restonic4.registry;
 
 import com.restonic4.commands.PingCommand;
+import com.restonic4.commands.TrashCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -19,7 +20,9 @@ public class CommandRegistry {
         for (int i = 0; i < commandList.size(); i++) {
             Command command = commandList.get(i);
 
-            if (command.getName().equals(name)) {
+            if (command.getName().equals(name) && !registry.containsKey(command.getIdLong())) {
+                System.out.println("Registering already created command: " + name);
+
                 registry.put(command.getIdLong(), commandObject);
                 commandList.remove(i);
                 return;
@@ -27,6 +30,8 @@ public class CommandRegistry {
         }
 
         // Not found
+
+        System.out.println("Registering new command: " + name);
 
         CommandCreateAction commandCreateAction = guild.upsertCommand(commandObject.getName(), commandObject.getDescription());
         commandObject.setCommandCreateAction(commandCreateAction);
@@ -38,15 +43,19 @@ public class CommandRegistry {
     public static void registerCommands(Guild guild) {
         guild.retrieveCommands().queue(commandList -> {
             getOrCreateCommand(guild, commandList, new PingCommand());
-            removeTrash(commandList);
+            //getOrCreateCommand(guild, commandList, new TrashCommand());
+
+            removeTrash(guild, commandList);
         }, error -> {
             System.out.println("Error retrieving commands: " + error.getMessage());
         });
     }
 
-    public static void removeTrash(List<Command> commandList) {
+    public static void removeTrash(Guild guild, List<Command> commandList) {
         for (Command command : commandList) {
-            System.out.println("Trash command: " + command);
+            System.out.println("Removing command: " + command);
+
+            guild.deleteCommandById(command.getIdLong()).queue();
         }
     }
 
