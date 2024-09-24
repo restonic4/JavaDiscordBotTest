@@ -1,5 +1,6 @@
 package com.restonic4;
 
+import com.restonic4.commands.EngineCommand;
 import com.restonic4.commands.PingCommand;
 import com.restonic4.registry.CommandRegistry;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -40,6 +41,7 @@ public class Main {
                 System.out.println("Guild: " + guild);
 
                 CommandRegistry.register(new PingCommand());
+                CommandRegistry.register(new EngineCommand());
 
                 CommandRegistry.registerCommands(guild);
                 CommandRegistry.populate();
