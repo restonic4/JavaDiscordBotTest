@@ -1,18 +1,18 @@
 package com.restonic4.registry;
 
-import com.restonic4.commands.PingCommand;
-import com.restonic4.commands.TrashCommand;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.requests.restaction.CommandCreateAction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class CommandRegistry {
     private static Map<Long, CommandObject> registry = new HashMap<>();
+    private static List<CommandObject> pendingCommands = new ArrayList<>();
 
     private static void getOrCreateCommand(Guild guild, List<Command> commandList, CommandObject commandObject) {
         String name = commandObject.getName();
@@ -40,10 +40,15 @@ public class CommandRegistry {
         });
     }
 
+    public static void register(CommandObject commandObject) {
+        pendingCommands.add(commandObject);
+    }
+
     public static void registerCommands(Guild guild) {
         guild.retrieveCommands().queue(commandList -> {
-            getOrCreateCommand(guild, commandList, new PingCommand());
-            //getOrCreateCommand(guild, commandList, new TrashCommand());
+            for (CommandObject commandObject : pendingCommands) {
+                getOrCreateCommand(guild, commandList, commandObject);
+            }
 
             removeTrash(guild, commandList);
         }, error -> {

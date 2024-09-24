@@ -1,5 +1,6 @@
 package com.restonic4;
 
+import com.restonic4.commands.PingCommand;
 import com.restonic4.registry.CommandRegistry;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
@@ -37,6 +38,8 @@ public class Main {
             List<Guild> guilds = jda.getGuilds();
             for (Guild guild : guilds) {
                 System.out.println("Guild: " + guild);
+
+                CommandRegistry.register(new PingCommand());
 
                 CommandRegistry.registerCommands(guild);
                 CommandRegistry.populate();
