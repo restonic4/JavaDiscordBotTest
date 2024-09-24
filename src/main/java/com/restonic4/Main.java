@@ -1,14 +1,12 @@
 package com.restonic4;
 
+import com.restonic4.registry.CommandRegistry;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.internal.utils.JDALogger;
 
-import java.util.EnumSet;
 import java.util.List;
 
 //invite perms id = 1759218067566535
@@ -21,19 +19,30 @@ public class Main {
 
         System.out.println(token);
 
-        //JDALogger.setFallbackLoggerEnabled(false)
+        setUpBot(token);
+    }
 
-        JDA jda = JDABuilder.createDefault(token)
-                .enableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
-                .addEventListeners(new Listener())
-                .build();
+    public static void setUpBot(String token) {
+        try {
+            //JDALogger.setFallbackLoggerEnabled(false)
 
-        List<Guild> guilds = jda.getGuilds();
-        for (Guild guild : guilds) {
-            System.out.println("Guild: " + guild);
-            CommandRegistry.registerCommands(guild);
+            JDA jda = JDABuilder.createDefault(token)
+                    .enableIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS))
+                    .addEventListeners(new Listener())
+                    .build();
+
+            // Wait for JDA to log in with discord
+            jda.awaitReady();
+
+            List<Guild> guilds = jda.getGuilds();
+            for (Guild guild : guilds) {
+                System.out.println("Guild: " + guild);
+
+                CommandRegistry.registerCommands(guild);
+                CommandRegistry.populate();
+            }
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
         }
-
-        //jda.awaitReady();
     }
 }
