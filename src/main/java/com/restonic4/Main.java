@@ -7,6 +7,9 @@ import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import java.util.List;
@@ -40,11 +43,8 @@ public class Main {
             for (Guild guild : guilds) {
                 System.out.println("Guild: " + guild);
 
-                CommandRegistry.register(new PingCommand());
-                CommandRegistry.register(new EngineCommand());
-
-                CommandRegistry.registerCommands(guild);
-                CommandRegistry.populate();
+                CommandRegistry.register(guild, new PingCommand());
+                CommandRegistry.register(guild, new EngineCommand());
             }
         } catch (Exception exception) {
             throw new RuntimeException(exception);
