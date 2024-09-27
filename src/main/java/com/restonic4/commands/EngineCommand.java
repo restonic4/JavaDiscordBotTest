@@ -17,8 +17,6 @@ public class EngineCommand extends CommandObject {
         SlashCommandData command = Commands.slash("engine", "Do something related with the engine")
                 .addOption(OptionType.STRING, "action", "The action to do", true);
 
-        guild.updateCommands().addCommands(command).queue();
-
         return command;
     }
 

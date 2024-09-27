@@ -13,8 +13,6 @@ public class PingCommand extends CommandObject {
     public SlashCommandData create(Guild guild) {
         SlashCommandData command = Commands.slash("ping", "Gives you pong!");
 
-        guild.updateCommands().addCommands(command).queue();
-
         return command;
     }
 

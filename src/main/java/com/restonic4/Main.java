@@ -45,6 +45,8 @@ public class Main {
 
                 CommandRegistry.register(guild, new PingCommand());
                 CommandRegistry.register(guild, new EngineCommand());
+
+                CommandRegistry.finishRegistration(guild);
             }
         } catch (Exception exception) {
             throw new RuntimeException(exception);

@@ -32,6 +32,6 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        CommandRegistry.executeCommand(event.getCommandIdLong(), event);
+        CommandRegistry.executeCommand(event.getName(), event);
     }
 }
